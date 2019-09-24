@@ -1,3 +1,4 @@
+/*
 오라클DB는 TABLESPACE를 생성해줘야함
 myts라는 이름으로 100MB크기의 생성할것임. 여기서는 오라클이 설치된C:\app\1class-014\oradata\myoracle폴더에 myts.dbf라는
 이름으로 생성할 것임.그리고 꽉찰것을 대비해 자동으로 5mb씩 증가하는 옵션 AUTOEXTEND 도 추가할것.
@@ -26,33 +27,33 @@ GRANT DBA TO ora_user
 SQL Developer에서 다음과같이 실행해보자
 --입력--
 SELECT table_name FROM user_tables;
-
+*/
 --결과--
-TABLE_NAME
+--TABLE_NAME
 ------------
-CUSTOMERS
-SALES2
-SALES
-,,, 
+--CUSTOMERS
+--SALES2
+--SALES
+--,,, 
 ------------
 
-직접 테이블을 만들어보자
+--직접 테이블을 만들어보자
 --입력--
 create table mytable(
     id varchar2(100) primary key,
     name varchar2(50) not null
     );
 
-테이블에 내용을 넣어주자
+--테이블에 내용을 넣어주자
 --입력--
 insert into mytable values('hkd','홍길동');
 
-commit으로 최종결정 해줘야함. 
+--commit으로 최종결정 해줘야함. 
 --입력--
 commit;
 
 
-연습으로 table을 만들어 보자.
+--연습으로 table을 만들어 보자.
 --입력--
 create table ex2_2(
     column1 varchar2(3),
@@ -83,17 +84,17 @@ commit;
 
 select column_id, column_name, data_type, data_length
 from user_tab_cols 
-where table_name ='ex2_3' 
+where table_name ='EX2_3' 
 order by column_id;
 
 
-====날짜 데이터 타입
-date와 timestamp의 차이
+--날짜 데이터 타입
+--date와 timestamp의 차이
 --입력--
 select sysdate from dual;
 select systimestamp from dual;
 
-====예제 2_5
+--예제 2_5
 --입력--
 create table ex2_5(
     col_date        date,
@@ -104,4 +105,63 @@ insert into ex2_5 values (sysdate, systimestamp);
 commit;
 select * from ex2_5;
 
+
+
+
+create table ex2_5(
+    col_date        date,
+    col_timestamp   timestamp
+    );
+commit;
+insert into ex2_5 values (sysdate, systimestamp);
+commit;
+select * from ex2_5;
+
+insert into ex2_5 values (sysdate, systimestamp);
+
+--제약조건--
+--1.NOT NULL
+
+create Table ex2_6(
+    col_null    varchar2(10),
+    col_not_null    varchar2(10) not null
+    );
+commit;
+
+--ex2_6table의 col_not_null 컬럼에 10 입력
+insert into ex2_6(col_not_null) values(10);
+commit;
+
+--ex2_6table의 null 컬럼에 10 입력
+insert into ex2_6(null) values(10);
+--col_not_null에 null 삽입 오류
+
+--ex2_6 TABLE 의 칼럼에 각각 순서대로 'aa','' 입력
+insert into ex2_6 values ('aa','');
+--not null 로 설정했는데 공백을 입력해서 에러가 발생
+
+insert into ex2_6 values ('aa','bb');
+commit;
+    
+select * from ex2_6;
+
+--기본키
+create table ex2_8(
+    col1 varchar2(10)   primary key,
+    col2 varchar2(10)
+    );
+
+commit;
+
+select constraint_name, constraint_type, table_name, search_condition
+from user_constraints
+where table_name = 'EX2_8';
+
+--pk에 ''입력시 오류발생
+insert into EX2_8 values('','aa');
+
+--col1,2에 값을 넣어준다
+insert into EX2_8 values('aa','aa');
+commit;
+-- 똑같은 값을 한번더 넣으려한다면 무결성 제약조건 위배라는 에러 뜬다
 

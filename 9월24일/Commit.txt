@@ -1,0 +1,7 @@
+Commit
+
+Oracle - 수동
+MySQL, MS-SQLSERVER - 자동
+
+-> 응용프로그램 - 자동
+(java,c#,php,asp,jsp 등등)
