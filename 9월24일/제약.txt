@@ -1,0 +1,11 @@
+Constraint(제약)
+>> 무결성을 지키기 위한 장치
+1.PK(Primary Key) - 중복방지
+=> 한 테이블에 1개만 설정 가능 
+-> not null(식별자기 때문에 값이 무조건입력되어야함)
+
+기본키(PK) = not null + Unique, 보통 키라고 하면 PK를 의미함 
+
+2.Unique - 중복방지
+=> null이 1개 들어갈 수 있음.
+=> 한 테이블에 여러개의 Unique 생성 가능

@@ -1,0 +1,10 @@
+--오라클 11g
+https://www.oracle.com/database/technologies/112010-win64soft.html
+
+설치시 전역 DB이름 : myoracle
+		비번 :1234
+
+--SQL Developer 19.2.1
+https://www.oracle.com/tools/downloads/sqldev-v192-downloads.html
+
+

@@ -16,3 +16,7 @@ ERWin : 상용
 ERMaster : 무료. eclipse plugin
 
 5. 데이터 입력
+
+스키마(구조)
+=> DataBase구조 혹은 파일 의미
+=> User를 의미하기도 함

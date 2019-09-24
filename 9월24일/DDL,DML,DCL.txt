@@ -1,0 +1,24 @@
+DDL (Data Definition Language)
+>>데이터베이스 객체를 생성 삭제 변경하는 언어
+- CREATE : 테이블이나 인덱스, 뷰 등 데이터베이스 객체를 생성
+- DROP : 생성된 데이터베이스 객체를 영구히 삭제
+- ALTER : 이미 생성된 데이터베이스 객체를 수정
+- TRUNCATE : 테이블이나 클러스터의 데이터를 통째로 삭제
+
+DML (Data Manipulation Language)
+>> 데이터베이스 객체를 조작하는 언어
+- SELECT : 테이블이나 뷰에 있는 데이터 조회
+- INSERT : 데이터를 신규로 생성
+- UPDATE : 이미 생성된 데이터를 수정
+- DELETE : 데이터 삭제
+- COMMIT : 변경된 데이터를 최종 적용함
+- ROLLBACK : 트랜잭션 처리, 변경된 데이터를 적용하지 않고 이전으로 되돌림
+
+DCL (Data Control Language)
+>>객체 권한 부여 등의 제어어
+>> 데이터의 보안, 무결성, 데이터 회복, 병행 수행 제어 등을 정의하는데 사용하는 언어
+- COMMIT 
+- ROLLBACK
+--- 위 2개는 DML,DCL 경계 모호
+- GRANT : DB사용자에게 권한부여
+- REVOKE : 권한회수

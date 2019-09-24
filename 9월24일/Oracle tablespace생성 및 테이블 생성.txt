@@ -47,7 +47,7 @@ create table mytable(
 --입력--
 insert into mytable values('hkd','홍길동');
 
-commit으로 확정 해주어야함.
+commit으로 최종결정 해줘야함. 
 --입력--
 commit;
 
