@@ -2,21 +2,21 @@
 myts라는 이름으로 100MB크기의 생성할것임. 여기서는 오라클이 설치된C:\app\1class-014\oradata\myoracle폴더에 myts.dbf라는
 이름으로 생성할 것임.그리고 꽉찰것을 대비해 자동으로 5mb씩 증가하는 옵션 AUTOEXTEND 도 추가할것.
 --입력--
-CREATE TABLESPACE myts DATAFILe
+CREATE TABLESPACE myts DATAFILE
 'C:\app\1class-014\oradata\myoracle\myts.dbf' SIZE 100M AUTOEXTEND ON NEXT 5M;
 
 사용자 생성하기 
 --입력--
 CREATE USER ora_user IDENTIFIED BY hong
 DEFAULT TABLESPACE myts
-TEMPORARY TABLESPACE tmp;
+TEMPORARY TABLESPACE temp;
 
 권한(롤,Role) 부여하기 | DBA(데이터베이스관리자)권한을 ora_user에게 준다
 --입력--
 GRANT DBA TO ora_user
 
 샘플스키마 설치
-1.http://github.com/gilbutitbook/006696  에 가서 expall.dmp 와 expcust.dmp 다운받는다.
+1.http://github.com/gilbutitbook/006696  에 가서 expall.dmp 와 expcust.dmp 다운받는다. > 파일 통쨰로 받아서 안에있는거만 쓴다
 2.C: 에 backup 폴더를 하나 생성하고 받은 파일을 위치시킨다.
 3.명령창을 열어 위치를 C:\backup으로 이동한다.
  -- win+R > cmd 입력 > cd C:\backup > 엔터
