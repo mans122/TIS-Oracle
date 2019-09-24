@@ -1,0 +1,18 @@
+DB 작업 순서.
+
+1. DB Server 설치
+2. DataBase 생성 (TableSpace 생성)
+ DataBase : 데이터를 저장하는 물리적 공간(파일)
+ DBMS(DataBase Management System):데이터베이스 관리 시스템
+ = DataBase 로 부름
+DBS(DataBase System)
+:DataBase + DBMS + User
+
+3. 계정(사용자)생성, 권한부여
+
+4. 테이블 생성
+
+ERWin : 상용
+ERMaster : 무료. eclipse plugin
+
+5. 데이터 입력
