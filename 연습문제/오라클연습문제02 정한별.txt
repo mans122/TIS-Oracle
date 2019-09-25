@@ -1,0 +1,47 @@
+1. student 테이블을 생성하시오. 모든 항목 not null.
+create table student(
+    id varchar(10) not null,
+    name varchar(20) not null,
+    department varchar(30) not null,
+    address varchar(50) not null
+);
+2. student 테이블에 데이터를 입력하시오.
+insert into student values (20160001,'홍길동','컴퓨터공학과','서울시 영등포구');
+insert into student values (20162233,'이순신','멀티미디어학과','부산시 남구');
+insert into student values (20161177,'왕건','멀티미디어학과','강원도 삼척');
+
+
+3. 학번,이름,학과를 출력하시오.
+select * from student;
+
+4. 컴퓨터공학과 학생만 출력하시오.
+select * from student where department='컴퓨터공학과';
+
+5. 서울시에 사는 학생만 출력하시오.
+select * from student where address like '서울%';
+
+6. 학번순으로 정렬해서 출력하시오. 오름차순
+select * from student order by department asc;
+
+
+7. 이름순으로 정렬해서 출력하시오. 내림차순
+select * from student order by name desc;
+
+
+8. 학과별, 학번별로 정렬해서 출력하시오. 모두 오름차순.
+select * from student order by department,id asc;
+
+
+9. 멀티미디어학과 학생들만 검색해서 student_MultiMedia
+테이블을 생성하시오.
+
+create table student_MultiMedia 
+as
+select * from student where department='멀티미디어학과';
+
+
+
+ 
+
+
+

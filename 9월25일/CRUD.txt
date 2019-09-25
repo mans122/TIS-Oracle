@@ -1,0 +1,9 @@
+CRUD
+Create  - insert
+Read    - select
+Update  - update
+Delete  - delete
+
+테이블의
+행(row) - record
+열(column) - field
