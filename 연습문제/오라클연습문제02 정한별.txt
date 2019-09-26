@@ -1,6 +1,6 @@
 1. student 테이블을 생성하시오. 모든 항목 not null.
 create table student(
-    id varchar(10) not null,
+    id varchar(10) primary key not null,
     name varchar(20) not null,
     department varchar(30) not null,
     address varchar(50) not null
