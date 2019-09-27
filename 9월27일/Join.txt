@@ -1,0 +1,8 @@
+select
+: 함수, order by, group by, 집계함수,having, union, join, subquery
+
+insert
+
+update
+
+delete

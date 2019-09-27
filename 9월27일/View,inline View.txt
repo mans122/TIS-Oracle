@@ -1,0 +1,17 @@
+view, inlinew view
+
+inline View : select 문이 실행될 때 임시로 생성, 자동소멸
+
+view :계속 존재
+=> 데이터를 가지고있지 않음
+=> 복잡한 join을 단순화해서 사용
+
+생성
+> create or replace view 뷰 이름 as select 문장;
+삭제
+> drop view 뷰이름
+
+ex) 
+create or replace view v1
+as
+select * from employees;

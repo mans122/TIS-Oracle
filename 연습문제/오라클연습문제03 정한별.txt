@@ -1,0 +1,93 @@
+1.테이블을 생성해서,데이터를 입력하시오.
+
+-- member2
+id,이름,성별,가입날짜 
+insert into member2 values('hkd','홍길동','m','2001-01-01');
+insert into member2 values('lss','이순신','m','2003-02-01');
+insert into member2 values('hj','황진이','f','2002-11-13');
+insert into member2 values('wg','왕건','m','2005-12-21');
+insert into member2 values('pms','박문수','m','2006-11-09');
+
+create table member2(
+    id varchar2(10) primary key,
+    name varchar(20) not null,
+    sex varchar2(2) not null,
+    rDate date default sysdate
+);
+
+-- goods
+상품번호,상품이름,가격
+insert into goods values(1,'mp3',10000);
+insert into goods values(2,'camera',50000);
+insert into goods values(3,'pc',700000);
+
+create table goods(
+    gCode number primary key,
+    gName varchar2(20) not null,
+    price number not null
+);
+
+-- orders
+주문번호,주문자이름,주문날짜
+insert into  orders values(1,'hkd','2001-03-27');
+insert into orders values(2,'wg','2005-04-17');
+insert into orders values(3,'hkd','2006-02-07');
+
+create table orders(
+    oNo number primary key,
+    oName varchar2(20) not null,
+    oDate date default sysdate
+);
+
+-- ordersDetail
+(자체 일련)번호, 주문번호, 상품번호, 상품수량
+insert into ordersDetail values(1,1,1,1);
+insert into ordersDetail values(2,1,3,1);
+insert into ordersDetail values(3,2,2,2);
+insert into ordersDetail values(4,3,2,1);
+
+create table oDetail(
+    dNo number primary key,
+    oNo number not null,
+    gCode number not null,
+    Ea number not null
+);
+
+2. 전체회원수를 구하시오.
+select count(*) as 총회원수 from member2;
+
+3. 성별 회원수를 구하시오.
+성별, 회원수
+select sex 성별, count(*) as 회원수 from member2 group by sex;
+
+4. 가장 많이(갯수기준) 판매된 상품부터 출력하시오.
+상품명 , 판매수량
+select g.gname 상품명, sum(o.ea) 판매수량
+from ordersDetail o ,goods g
+where o.gcode = g.gcode
+group by g.gname
+order by 판매수량 desc;
+
+5. 주문내역을 출력하시오.
+회원명, 상품명, 주문갯수
+select od.oName,a.gName,a.ea
+from orders od,
+(select o.oNo,g.gName,o.ea
+from oDetail o,goods g
+where o.gCode = g.gCode) a
+where a.oNo = od.oNo
+order by od.oName;
+
+
+6. 성이 '홍'인 회원을 검색하시오.
+select name from member2 where name like '홍%';
+
+
+7. 년도, 상품별 판매수량을 구하시오.
+년도, 상품명, 판매갯수
+select substr(to_char(o.odate,'YYYYMMDD'),1,4) year,a.gname,a.ea
+from orders o,(select od.oNo,g.gname,od.ea
+                from goods g,odetail od
+                where g.gCode = od.gCode) a
+where o.ono = a.ono
+order by year;
