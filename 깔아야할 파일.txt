@@ -8,3 +8,5 @@ https://www.oracle.com/database/technologies/112010-win64soft.html
 https://www.oracle.com/tools/downloads/sqldev-v192-downloads.html
 
 
+자바 채팅 참고사이트
+https://github.com/gmlwjd9405/JavaChating/blob/master/JavaChattingClient/src/ChattingFrame.java
