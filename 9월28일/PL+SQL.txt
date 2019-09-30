@@ -1,0 +1,5 @@
+PL/SQL : 오라클 확장 SQL
+
+함수, stored procedure, trigger
+
+>> 관리자가 서버에서 사용하는 관리프로그램, 통계프로그램 제작시 많이 사용

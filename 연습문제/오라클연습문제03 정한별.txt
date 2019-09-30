@@ -63,7 +63,7 @@ select sex 성별, count(*) as 회원수 from member2 group by sex;
 4. 가장 많이(갯수기준) 판매된 상품부터 출력하시오.
 상품명 , 판매수량
 select g.gname 상품명, sum(o.ea) 판매수량
-from ordersDetail o ,goods g
+from oDetail o ,goods g
 where o.gcode = g.gcode
 group by g.gname
 order by 판매수량 desc;

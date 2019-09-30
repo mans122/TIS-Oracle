@@ -1,0 +1,100 @@
+1. 동아리(Dongari) 테이블을 생성하시오.
+	
+	동아리ID, 동아리이름
+create table Dongari(
+    id varchar2(30) primary key,
+    name varchar(20) not null
+);
+
+2. 동아리(DongariJoin) 가입현황 테이블을 생성하시오.
+   => 한 명의 학생이 여러 동아리에 복 수로 가입할 수 있음.
+		
+	번호, 학생ID, 동아리ID
+
+create table DongariJoin(
+    join_num number primary key,
+    s_id varchar2(20) not null,
+    d_id varchar2(30) not null
+);
+
+3. 동아리 가입현황 목록을 출력하시오.
+	
+	동아리이름, 학생명, 학생ID
+select a.name, d.name, a.id
+from dongari d,
+                (select s.name,dj.d_id,s.id
+                from student s,dongarijoin dj
+                where s.id = dj.s_id) a
+where d.id=a.d_id
+order by a.name;
+
+4. 동아리에 가입하지 않은 학생목록을 출력하시오.
+
+	학생이름
+select a.name
+from (select s.name, dj.d_id            
+        from dongarijoin dj,student s
+        where s.id = dj.s_id(+)) a
+where d_id is null;        
+
+5. 한 명의 학생도 가입하지 않은 동아리목록을 출력하시오.
+=> 있다고 가정
+
+	동아리이름
+--외부조인
+select a.name
+from (select d.name,dj.s_id
+        from dongari d, dongarijoin dj
+        where d.id = dj.d_id(+)) a
+where a.s_id is null;
+
+--안티조인
+select DISTINCT d.name
+from dongari d,dongarijoin dj
+where d.id not in(select d_id from dongarijoin);
+6. Book테이블을 생성하고, bid를 pk로 설정하고,데이터를 입력하시오.
+
+bid varchar(10) -- 책번호
+title varchar(20) -- 책제목
+
+0001 자바
+0002 Oracle
+0003 HTML
+0004 JSP
+
+7. rentBook 테이블을 생성하시오. id,bid를 참조키로 설정하시오.
+no는 pk.
+
+no number -- 대출번호
+id varchar(10) -- 학번
+bid varchar(10) -- 책번호
+rdate date -- 대출일
+
+create table rentBook(
+    no number primary key,
+    id varchar2(20) not null references student(id),
+    bid varchar2(10) not null references Book(bid),
+    rdate date default sysdate
+    );
+
+
+8. 7번 테이블에 다음 데이터를 입력하시오.
+
+1 20160001 0001 2016-12-01
+2 20162233 0002 2016-12-02
+
+
+9. 학번,학생명,대출한 책이름, 대출일을 출력하시오.
+select s.name, a.*
+from student s,
+        (select rb.id,b.title,rb.rdate
+        from rentBook rb,book b
+        where rb.bid = b.bid) a
+where a.id = s.id;
+
+10. 한번도 대출되지 않은 책의 목록을 출력하시오.
+select a.title
+from (select b.title,rb.rdate
+       from rentBook rb,book b
+       where rb.bid(+) = b.bid)a
+where a.rdate is null;
