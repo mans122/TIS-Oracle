@@ -1,0 +1,207 @@
+SQL> SET SERVEROUTPUT ON;
+
+SQL> -- 테이블 생성
+
+SQL> CREATE TABLE EMP_DEPT
+
+  2  ( DEPT_CD VARCHAR2(20)
+
+  3  , DEPT_NM VARCHAR2(20)
+
+  4  );
+
+
+
+테이블이 생성되었습니다.
+
+
+
+SQL> -- 프로시저 생성
+
+SQL> CREATE PROCEDURE TEST_PROCEDURE
+
+  2  IS
+
+  3  PRAGMA AUTONOMOUS_TRANSACTION;
+
+  4  BEGIN
+
+  5     INSERT INTO EMP_DEPT
+
+  6         (DEPT_CD, DEPT_NM)
+
+  7     VALUES
+
+  8         ('A', 'B');
+
+  9     COMMIT;
+
+ 10  END;
+
+ 11  /
+
+
+
+프로시저가 생성되었습니다.
+
+
+
+SQL> -- INSERT 후 프로시저 실행 / ROLLBACK;
+
+SQL> BEGIN
+
+  2     INSERT INTO EMP_DEPT
+
+  3         (DEPT_CD, DEPT_NM)
+
+  4     VALUES
+
+  5         ('A1', 'B1');
+
+  6  TEST_PROCEDURE;
+
+  7  ROLLBACK;
+
+  8  END;
+
+  9  /
+
+
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+
+
+
+SQL> SELECT * FROM EMP_DEPT;
+
+
+
+DEPT_CD              DEPT_NM
+
+-------------------- --------------------
+
+A                    B
+
+
+
+-----------------------------------------------------------------------------
+
+-- TEST_PROCEDURE 내부의 것은 COMMIT; 이 적용되었으며,
+
+-- 외부 INSERT 문은 COMMIT 적용되지 않음.
+
+-----------------------------------------------------------------------------
+
+
+
+SQL> DELETE FROM EMP_DEPT;
+
+
+
+1 행이 삭제되었습니다.
+
+
+
+SQL> COMMIT;
+
+
+
+커밋이 완료되었습니다.
+
+
+
+SQL> -- 프로시저 재생성
+
+SQL> CREATE OR REPLACE PROCEDURE TEST_PROCEDURE
+
+  2  IS
+
+  3  --PRAGMA AUTONOMOUS_TRANSACTION;
+
+  4  BEGIN
+
+  5     INSERT INTO EMP_DEPT
+
+  6         (DEPT_CD, DEPT_NM)
+
+  7     VALUES
+
+  8         ('C', 'D');
+
+  9     COMMIT;
+
+ 10  END;
+
+ 11  /
+
+
+
+프로시저가 생성되었습니다.
+
+
+
+SQL> -- INSERT 후 프로시저 실행 / ROLLBACK;
+
+SQL> BEGIN
+
+  2     INSERT INTO EMP_DEPT
+
+  3         (DEPT_CD, DEPT_NM)
+
+  4     VALUES
+
+  5         ('A1', 'B1');
+
+  6  TEST_PROCEDURE;
+
+  7  ROLLBACK;
+
+  8  END;
+
+  9  /
+
+
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+
+
+
+SQL> SELECT * FROM EMP_DEPT;
+
+
+
+DEPT_CD              DEPT_NM
+
+-------------------- --------------------
+
+C1                   D1
+
+C                    D
+
+-----------------------------------------------------------------------------
+
+-- TEST_PROCEDURE 내부의 것은 COMMIT; 이 적용되었으며,
+
+-- 외부 INSERT 문도 COMMIT 적용됨
+
+-----------------------------------------------------------------------------
+
+SQL>
+
+
+
+
+
+
+
+프로그램은 기본적으로 순차적으로 위에서 부터 실행된다.
+
+이에따라 COMMIT; 이라는 명령어는
+
+COMMIT 위에 실행된 프로그램들을 일괄 COMMIT 처리하지만,
+
+PRAGMA AUTONOMOUS_TRANSACTION;
+
+이라는 명령어를 사용하면 
+
+명령어가 사용된 BEGIN - END; 사이의 구문에 대한 COMMIT; 만이 유효하다.
