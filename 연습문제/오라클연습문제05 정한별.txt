@@ -1,0 +1,130 @@
+1. 상품테이블(재고)을 생성하시오.
+	상품번호, 상품명, 가격, 재고량
+create table inven(
+    gCode number PRIMARY key,
+    gname varchar2(30) not null,
+    gprice number not null,
+    gEa number not null
+);
+
+2. 입고테이블을 생성하시오.
+	입고번호, 상품번호, 입고량, 입고날짜
+
+create table invenIn(
+    in_No number primary key,
+    gCode number not null,
+    in_Ea number not null,
+    in_Date date default sysdate
+);
+
+
+3. 출고테이블을 생성하시오.
+	출고번호, 상품번호, 출고량, 출고날짜
+
+create table invenOut(
+    out_No number primary key,
+    gCode number not null,
+    out_Ea number not null,
+    out_Date date default sysdate
+);
+
+
+4. 1번테이블에 데이터를 5건이상 입력하시오.
+
+insert into inven values(1,'mp3',200000,10000);
+insert into inven values(2,'PC',1000000,1000);
+insert into inven values(3,'노트북',700000,1000);
+insert into inven values(4,'헤드셋',100000,2000);
+insert into inven values(5,'카메라',500000,500);
+insert into inven values(6,'TV',2200000,100);
+insert into inven values(7,'휴대폰',800000,800);
+insert into inven values(8,'마우스',30000,40000);
+insert into inven values(9,'키보드',50000,30000);
+insert into inven values(10,'모니터',400000,3000);
+
+5. 2번테이블에 데이터가 입력되면 1번 테이블을 업데이트 하시오.
+	insert into 입고 ....
+	update 재고 set 재고량=현재재고량+입고량 ...
+create or replace procedure p_invenin(
+    p_No number,
+    p_gCode inven2.gcode%type,
+    p_Ea number,
+    p_Date date
+    )
+is 
+    PRAGMA AUTONOMOUS_TRANSACTION;
+begin
+    commit;
+    insert into invenin2 values (p_No,p_gCode,p_Ea,p_date);
+    update inven2 set gea =gea + p_ea where gcode = p_gcode;
+    
+    exception when others then
+        RAISE_APPLICATION_ERROR(-20000, '에러발생');
+        rollback;
+end;
+	
+
+6. 3번테이블에 데이터가 입력되면 1번 테이블을 업데이트 하시오.
+	insert into 출고 ....
+	update 재고 set 재고량=현재재고량-출고량 ...
+
+create or replace procedure p_invenOut(
+    p_No number,
+    p_gCode inven2.gcode%type,
+    p_Ea number,
+    p_Date date
+    )
+is 
+    PRAGMA AUTONOMOUS_TRANSACTION;
+    vn_cnt number:=0;
+begin
+    commit;
+    select count(*) 
+    into vn_cnt from inven2 
+    where gcode=p_gcode and gea >= p_ea;
+    
+    if vn_cnt>=1 then
+        insert into invenout2 values (p_No,p_gCode,p_Ea,p_date);
+        update inven2 set gea = gea - p_ea where gcode = p_gcode;
+        
+    else
+        RAISE_APPLICATION_ERROR(-20000, '출고 수량이 재고 수량보다 커서 출고할 수 없습니다');
+        rollback;
+    end if;
+end;
+
+7. 5~6번 처리를 할 때 중요한 점은?
+에러 발생시 취소 
+예외처리 시 롤백하도록 코드 작성
+5,6번에서는 PRAGMA 를 사용하여 프로시저 시작단계에서 commit을 하고
+에러발생시 롤백하는게 코드 작성
+
+8. 가장 재고량이 많은 상품을 구하시오.
+	상품명, 재고량
+select a.gname, a.gea
+from inven2 a, (select max(gea)max from inven2)b
+where b.max = a.gea;
+
+9. 입고횟수가 가장 많은 상품을 구하시오.
+	상품명, 총입고횟수
+
+10. 2017년에 입고된 상품목록을 구하시오.
+
+11. 연도,상품별 출고량의 합을 구하시오. 다음 형식으로 출력.
+
+2018 mp3 1000
+2018 car 50
+
+12. employees테이블의 manager_id를 매개변수로 사용해서
+상사의 이름을 리턴하는 함수를 생성하시오.
+
+
+select emp_name, manager_name(manager_id)
+from employees;
+
+13. employees테이블을 데이터 없이 복사해서 employees2테이블을
+생성하시오.
+
+14. employees에서 salary가 3000이 넘는 사람을 조회해서
+1번에서 만든 employees2테이블에 insert하는 stored procedure를
+생성하고 실행하시오.

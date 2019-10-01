@@ -1,0 +1,6 @@
+Stored Procedure는 수동
+
+Stored Procedure의 장점
+1. client 와 server간의 네트워크 트래픽 감소
+2. 실행계획이 저장됨. 일반적으로 실행속도가 빠름
+3. 윈도우프로그래밍 시, 유지보수에 유리

@@ -1,0 +1,16 @@
+create trigger tri_delete
+on outputtbl
+for insert
+as
+if exists(select * from stocktbl, inserted where stocktbl.id = inserted.id and stocktbl.cnt >= inserted.cnt)
+begin
+update stocktbl
+set stocktbl.cnt = stocktbl.cnt - inserted.cnt
+from stocktbl, inserted
+where stocktbl.id = inserted.id
+end
+else
+begin
+raiserror('출고 수량이 재고 수량보다 커서 출고할 수 없습니다.', 10, 1) --raiserror(val1, val2, val3)
+end
+[출처] 트리거 이용 (입고, 출고, 재고) 테이블 생성|작성자 주별

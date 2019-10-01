@@ -1,0 +1,13 @@
+커서 (CURSOR)
+Open > Fetch > Close 3단계 
+
+1. 서버측 커서
+PL/SQL에서 제공하는 cursor
+
+2. 클라이언트측 커서
+java의 ResultSet 객체
+
+커서는 최초 BOF이다가 fetch가 시작되면 
+첫번째 행부터 한행씩 마지막 행까지 루프안에서 작동.
+마지막 행 다음은 EOF.
+EOF이면 루프 종료
