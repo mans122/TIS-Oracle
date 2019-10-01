@@ -47,20 +47,20 @@ insert into inven values(10,'모니터',400000,3000);
 	update 재고 set 재고량=현재재고량+입고량 ...
 create or replace procedure p_invenin(
     p_No number,
-    p_gCode inven2.gcode%type,
+    p_gCode inven.gcode%type,
     p_Ea number,
     p_Date date
     )
 is 
-    PRAGMA AUTONOMOUS_TRANSACTION;
+    --PRAGMA AUTONOMOUS_TRANSACTION;
 begin
-    commit;
-    insert into invenin2 values (p_No,p_gCode,p_Ea,p_date);
-    update inven2 set gea =gea + p_ea where gcode = p_gcode;
+    --commit;
+    insert into invenin values (p_No,p_gCode,p_Ea,p_date);
+    update inven set gea =gea + p_ea where gcode = p_gcode;
     
     exception when others then
         RAISE_APPLICATION_ERROR(-20000, '에러발생');
-        rollback;
+     --   rollback;
 end;
 	
 
@@ -70,26 +70,26 @@ end;
 
 create or replace procedure p_invenOut(
     p_No number,
-    p_gCode inven2.gcode%type,
+    p_gCode inven.gcode%type,
     p_Ea number,
     p_Date date
     )
 is 
-    PRAGMA AUTONOMOUS_TRANSACTION;
+   -- PRAGMA AUTONOMOUS_TRANSACTION;
     vn_cnt number:=0;
 begin
-    commit;
+    --commit;
     select count(*) 
-    into vn_cnt from inven2 
+    into vn_cnt from inven
     where gcode=p_gcode and gea >= p_ea;
     
     if vn_cnt>=1 then
-        insert into invenout2 values (p_No,p_gCode,p_Ea,p_date);
-        update inven2 set gea = gea - p_ea where gcode = p_gcode;
+        insert into invenout values (p_No,p_gCode,p_Ea,p_date);
+        update inven set gea = gea - p_ea where gcode = p_gcode;
         
     else
         RAISE_APPLICATION_ERROR(-20000, '출고 수량이 재고 수량보다 커서 출고할 수 없습니다');
-        rollback;
+    --    rollback;
     end if;
 end;
 
@@ -102,15 +102,29 @@ end;
 8. 가장 재고량이 많은 상품을 구하시오.
 	상품명, 재고량
 select a.gname, a.gea
-from inven2 a, (select max(gea)max from inven2)b
+from inven a, (select max(gea)max from inven)b
 where b.max = a.gea;
 
 9. 입고횟수가 가장 많은 상품을 구하시오.
 	상품명, 총입고횟수
+select i.gname,d.max
+from inven i,
+(select a.gcode, c.max
+from (select count(in_no)count,gcode from invenin group by gcode) a,
+(select max(b.count) max from (select count(in_no)count,gcode from invenin group by gcode) b) c
+where a.count = c.max) d
+where d.gcode = i.gcode;
 
 10. 2017년에 입고된 상품목록을 구하시오.
+select * from invenin where to_char(in_date,'YYYY')=2017;
 
 11. 연도,상품별 출고량의 합을 구하시오. 다음 형식으로 출력.
+--출고테이블 비어있어서 입고 테이블로 작성
+select b.year, a.gname, b.sum
+from inven a,
+(select to_char(in_date,'YYYY') year,gcode,sum(in_ea) sum from invenin group by to_char(in_date,'YYYY'),gcode
+order by to_char(in_date,'YYYY'),gcode) b
+where b.gcode = a.gcode;
 
 2018 mp3 1000
 2018 car 50
@@ -118,13 +132,19 @@ where b.max = a.gea;
 12. employees테이블의 manager_id를 매개변수로 사용해서
 상사의 이름을 리턴하는 함수를 생성하시오.
 
-
-select emp_name, manager_name(manager_id)
-from employees;
+select DISTINCT c.mn as 상사이름
+from
+    (select b.emp_name, b.employee_id,b.manager_id mi,a.emp_name mn
+        from employees a,
+            (select emp_name,employee_id, manager_id from employees) b
+            where b.manager_id = a.employee_id) c
+where c.mi = 205;
 
 13. employees테이블을 데이터 없이 복사해서 employees2테이블을
 생성하시오.
+CREATE TABLE employees2 AS SELECT * FROM employees WHERE 1<>1;
 
 14. employees에서 salary가 3000이 넘는 사람을 조회해서
 1번에서 만든 employees2테이블에 insert하는 stored procedure를
 생성하고 실행하시오.
+INSERT INTO employees2 SELECT * FROM employees where salary>3000;
