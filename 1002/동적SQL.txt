@@ -1,0 +1,11 @@
+동적 SQL (dynamic SQL)
+: 실행 시에 sql이 완성되어 실행
+=> sql이 문자열로 처리되는 경우가 많다.
+
+
+1. 서버측 동적 sql
+=> PL/SQL에서 제공
+
+2. 응용프로그램 동적 sql
+=> jsp에서 구현
+=> spring은 mybatis에서 구현 가능

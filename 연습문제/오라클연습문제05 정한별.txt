@@ -52,15 +52,14 @@ create or replace procedure p_invenin(
     p_Date date
     )
 is 
-    --PRAGMA AUTONOMOUS_TRANSACTION;
 begin
-    --commit;
     insert into invenin values (p_No,p_gCode,p_Ea,p_date);
     update inven set gea =gea + p_ea where gcode = p_gcode;
+    commit;
     
-    exception when others then
-        RAISE_APPLICATION_ERROR(-20000, '에러발생');
-     --   rollback;
+    exception when OTHERS then
+        DBMS_OUTPUT.PUT_LINE('에러발생');
+        rollback;
 end;
 	
 
@@ -75,10 +74,9 @@ create or replace procedure p_invenOut(
     p_Date date
     )
 is 
-   -- PRAGMA AUTONOMOUS_TRANSACTION;
     vn_cnt number:=0;
 begin
-    --commit;
+    
     select count(*) 
     into vn_cnt from inven
     where gcode=p_gcode and gea >= p_ea;
@@ -86,12 +84,22 @@ begin
     if vn_cnt>=1 then
         insert into invenout values (p_No,p_gCode,p_Ea,p_date);
         update inven set gea = gea - p_ea where gcode = p_gcode;
-        
+        commit;
     else
-        RAISE_APPLICATION_ERROR(-20000, '출고 수량이 재고 수량보다 커서 출고할 수 없습니다');
-    --    rollback;
+	DBMS_OUTPUT.PUT_LINE('출고 수량이 재고 수량보다 커서 출고할 수 없습니다');
     end if;
+	exception when others then
+        rollback;
+        dbms_output.put_line(sqlerrm);
 end;
+
+
+
+
+
+
+
+
 
 7. 5~6번 처리를 할 때 중요한 점은?
 에러 발생시 취소 
@@ -147,4 +155,9 @@ CREATE TABLE employees2 AS SELECT * FROM employees WHERE 1<>1;
 14. employees에서 salary가 3000이 넘는 사람을 조회해서
 1번에서 만든 employees2테이블에 insert하는 stored procedure를
 생성하고 실행하시오.
-INSERT INTO employees2 SELECT * FROM employees where salary>3000;
+
+CREATE OR REPLACE PROCEDURE emp_in
+IS
+BEGIN
+   INSERT INTO employees2 SELECT * FROM employees where salary>3000;
+END;
