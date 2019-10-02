@@ -1,0 +1,17 @@
+create or replace trigger t8
+after insert or delete or update on loan   --*******
+for each row
+begin
+if inserting then
+    update emp set d_ck='Y' where id=:new.emp_id;
+elsif deleting then
+    update emp set d_ck=default where id=:old.emp_id;
+elsif updating then
+   update emp set d_ck='Y' where id=:new.emp_id;
+   update emp set d_ck=default where id=:old.emp_id;
+end if;
+end;
+
+
+출처
+https://islet4you.tistory.com/tag/트리거에%20조건문%20걸기
