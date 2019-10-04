@@ -222,7 +222,7 @@ begin
             update inven set gea = gea + :old.out_ea - :new.out_ea
             where gcode = :new.gcode;
         else
-            raise_application_error(-20011,'출고량이 현재보유량보다 큽니다');
+            raise_application_error(-20011,'수정된 출고량이 현재보유량보다 큽니다');
         end if;    
     end if;
     

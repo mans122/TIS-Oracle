@@ -1,0 +1,97 @@
+1. 재고테이블 생성
+	상품코드, 상품명, 재고량
+create table inven(
+    gCode number PRIMARY key,
+    gname varchar2(30) not null,
+    gprice number not null,
+    gEa number not null
+);
+
+2. 입고테이블 생성
+	입고번호, 상품코드, 입고량, 입고일
+create table invenIn(
+    in_No number primary key,
+    gCode number not null,
+    in_Ea number not null,
+    in_Date date default sysdate
+);
+
+
+3. 출고테이블 생성
+	출고번호, 상품코드, 출고량, 출고일
+create table invenOut(
+    out_No number primary key,
+    gCode number not null,
+    out_Ea number not null,
+    out_Date date default sysdate
+);
+4. 입고테이블에 insert되면 재고테이블을 update하는 트리거 생성.
+	after insert on 입고
+
+	:new 사용
+create or replace trigger tr_invenin
+after insert or update or delete on invenin
+for each row
+begin 
+    IF INSERTING THEN
+        update inven set gea = gea + :new.in_ea 
+        where gcode = :new.Gcode;
+    end if;
+    
+    IF UPDATING THEN
+        update inven set gea = gea - :old.in_ea + :new.in_ea
+        where gcode = :old.gcode;    
+    end if;
+    
+    IF DELETING THEN
+        update inven set gea = gea - :old.in_ea
+        where gcode = :old.gcode;    
+    end if;
+    EXCEPTION WHEN OTHERS THEN 
+        raise_application_error(-20011,'에러');
+end;
+5. 출고테이블에 insert되면 재고테이블을 update하는 트리거 생성.
+	after insert on 출고
+
+	:new 사용
+create or replace trigger tr_invenout
+after insert or update or delete on invenout
+for each row
+declare
+    cnt number := 0;
+begin
+    IF INSERTING THEN
+        select count(*) into cnt from inven where gcode=:new.gcode and gea >= :new.out_ea;
+        if cnt>=1 then
+            update inven set gea = gea - :new.out_ea
+            where gcode = :new.gcode;
+        else
+            raise_application_error(-20011,'출고량이 현재보유량보다 큽니다');
+        end if;   
+    END if;    
+    IF UPDATING THEN
+        select count(*) into cnt from inven where gcode=:new.gcode and gea >= :new.out_ea;
+        if cnt>=1 then
+            update inven set gea = gea + :old.out_ea - :new.out_ea
+            where gcode = :new.gcode;
+        else
+            raise_application_error(-20011,'수정된 출고량이 현재보유량보다 큽니다');
+        end if;    
+    end if;
+    
+    IF DELETING then
+        update inven set gea = gea + :old.out_ea
+        where gcode = :new.gcode;
+    end if;
+end;
+
+* 현재컬럼의 값을 업데이트
+update myt2 set amount=amount+1 where gcode=100;
+
+
+
+
+
+
+
+
