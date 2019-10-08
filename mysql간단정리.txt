@@ -1,0 +1,68 @@
+1. 서버설치
+
+2. DB생성
+create database company;
+
+3. 테이블생성
+use company;
+
+create table products(
+	id int not null auto_increment primary key,
+	name varchar(50) not null,
+	modelnumber varchar(15) not null,
+	series varchar(30) not null
+);
+
+=> not null : 반드시 입력.
+   null : 입력 안해도 됨.입력안하면 null이 저장됨.
+   auto_increment : 값이 자동 증가. 
+   primary key : 기본키. 값이 unique하도록 강제.
+		 row를 식별하는 대표키.
+   char : 고정길이문자열
+   varchar : 가변길이문자열
+
+4. 자료입력
+insert into products(name,modelnumber,series)
+values('Eric Clapton','0117602806','Artist');
+
+=> auto_increment 컬럼은 제외.
+   문자열은 작은따옴표로 마킹.숫자는 마킹없음.
+
+5. 자료검색
+select * from products;
+=> * : 모든컬럼, 
+모든 컬럼을 다써주는 것이 성능에는 더 좋음.
+
+select id, title from products;
+=> id, title컬럼만
+
+select * from products where id=2;
+=> where : 필터링
+
+select * from products 
+where modelnumber like '%011%';
+=> like : 검색어가 포함된 문자열 필터링.
+
+select * from products
+where id < 10 and name like '%eric%';
+
+select * from products
+where id < 2 or name like '%jeff%';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

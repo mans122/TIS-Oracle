@@ -1,0 +1,10 @@
+DBManager클래스 생성
+
+conn객체를 생성해서 리턴하는 메서드 구현
+
+다른클래스에서 1번에서 리턴된 conn객체사용
+
+
+DBManager db = new DBManager();
+conn = db.getConnection();
+=>메모리 절약을 위해서 singleton Patter 사용
